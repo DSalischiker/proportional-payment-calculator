@@ -1,139 +1,232 @@
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
 # Proportional Payment Calculator
 
-A React-based calculator that helps two people split bills proportionally based on their income differences, ensuring both parties pay the same percentage of their respective incomes.
+A sophisticated React-based calculator that helps two people split bills proportionally based on their income differences, ensuring both parties pay the same percentage of their respective incomes. Now with **multi-currency support** for ARS, USD, and BRL!
 
-## Features
+## ✨ Features
 
-- **Fair Split Calculation**: Uses the formula where each person pays according to their income ratio
+### 💰 **Core Functionality**
+- **Fair Split Calculation**: Uses proportional income-based formula
 - **Real-time Calculation**: Instant results as you input values
-- **Responsive Design**: Works on desktop and mobile devices
-- **Modern UI**: Built with Shadcn-UI components and Tailwind CSS
 - **Input Validation**: Ensures all inputs are valid positive numbers
 
-## How It Works
+### 🌍 **Multi-Currency Support**
+- **Three Currencies**: Argentine Peso (ARS), US Dollar (USD), Brazilian Real (BRL)
+- **Live Exchange Rates**: Real-time rates from DolarAPI
+- **Mixed Currency Inputs**: Each person can use different currencies
+- **Smart Conversion**: Automatic currency conversion for accurate calculations
+- **Rate Display**: Beautiful exchange rates card with refresh capability
 
-The calculator uses this formula:
+### 🎨 **User Experience**
+- **Modern UI**: Built with Shadcn-UI components and Tailwind CSS
+- **Responsive Design**: Works perfectly on desktop and mobile devices
+- **Dark Mode**: Sleek dark theme by default
+- **Loading States**: Visual feedback during rate fetching
+- **Error Handling**: Graceful fallbacks when API is unavailable
 
-- **Person A pays**: Total Bill × (Person A Income / (Person A Income + Person B Income))
-- **Person B pays**: Total Bill × (Person B Income / (Person A Income + Person B Income))
+## 🚀 How It Works
 
-This ensures both people pay the same percentage of their income.
+The calculator uses this proportional formula, with automatic currency conversion:
 
-### Example
+1. **Convert all amounts to ARS** (base currency)
+2. **Calculate proportions**: 
+   - Person A pays: Total Bill × (Person A Income / Combined Income)
+   - Person B pays: Total Bill × (Person B Income / Combined Income)
+3. **Convert results back** to the bill currency for display
 
-If Person A earns $60,000 and Person B earns $40,000, and the total bill is $100:
+This ensures both people pay the **exact same percentage** of their income, regardless of currency differences.
 
-- Person A pays: $100 × ($60,000 / $100,000) = $60 (0.1% of income)
-- Person B pays: $100 × ($40,000 / $100,000) = $40 (0.1% of income)
+### 💡 Example
 
-Both pay 0.1% of their respective incomes.
+**Multi-Currency Scenario:**
+- Person A earns **$5,000 USD** (≈ $6,675,000 ARS at 1,335 rate)
+- Person B earns **2,000,000 ARS**
+- Total bill is **R$ 500 BRL** (≈ $122,000 ARS at 244 rate)
 
-## Getting Started
+**Result:**
+- Person A pays: R$ 384.62 BRL (1.03% of income)
+- Person B pays: R$ 115.38 BRL (1.03% of income)
+
+Both pay exactly **1.03%** of their respective incomes!
+
+## 🛠️ Technology Stack
+
+### **Frontend**
+- **React 19** - Latest React with concurrent features
+- **TypeScript** - Full type safety
+- **Vite** - Lightning-fast build tool
+- **Tailwind CSS** - Utility-first styling
+
+### **UI Components**
+- **Shadcn-UI** - Beautiful, accessible component library
+- **Radix UI** - Unstyled, accessible primitives
+- **Lucide React** - Consistent iconography
+
+### **Currency Integration**
+- **DolarAPI** - Real-time Argentine exchange rates
+- **Custom Hooks** - Elegant state management
+- **Automatic Fallbacks** - Resilient error handling
+
+## 📦 Project Structure
+
+```
+proportional-payment-calculator/
+├── src/
+│   ├── components/
+│   │   ├── ui/                           # Shadcn-UI components
+│   │   │   ├── badge.tsx
+│   │   │   ├── button.tsx
+│   │   │   ├── card.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── label.tsx
+│   │   │   └── select.tsx
+│   │   ├── CurrencyRatesCard.tsx         # Exchange rates display
+│   │   ├── CurrencySelector.tsx          # Currency dropdown
+│   │   └── ProportionalPaymentCalculator.tsx # Main calculator
+│   ├── hooks/
+│   │   └── useCurrencyRates.ts           # Currency API integration
+│   ├── lib/
+│   │   └── utils.ts                      # Utility functions
+│   ├── App.tsx                           # Application root
+│   └── main.tsx                          # Entry point
+├── scraper/                              # DolarHoy scraper (bonus)
+│   ├── dolarhoy-scraper.js
+│   ├── api-server.js
+│   └── README.md
+└── public/
+```
+
+## 🚀 Getting Started
 
 ### Prerequisites
-
-- Node.js (version 18 or higher)
-- npm or yarn
+- **Node.js** 18+ 
+- **npm** or **yarn**
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
 ```bash
 git clone <your-repo-url>
 cd proportional-payment-calculator
 ```
 
-2. Install dependencies:
+2. **Install dependencies:**
 ```bash
 npm install
 ```
 
-3. Start the development server:
+3. **Start development server:**
 ```bash
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+4. **Open in browser:**
+Navigate to `http://localhost:5173`
 
-## Usage
+## 📖 Usage Guide
 
-1. Enter Person A's income in the first input field
-2. Enter Person B's income in the second input field
-3. Enter the total bill amount in the third input field
-4. Click "Calculate Payments" to see the results
-5. View the breakdown showing:
-   - How much each person should pay
-   - What percentage of their income this represents
-   - A summary of the total split
+### Basic Usage
 
-## Technology Stack
+1. **View Exchange Rates**: Current ARS rates are displayed at the top
+2. **Enter Person A Income**: Input amount and select currency
+3. **Enter Person B Income**: Input amount and select currency  
+4. **Enter Total Bill**: Input amount and select currency
+5. **Calculate**: Click "Calculate Payments" for instant results
+6. **Review Results**: See breakdown with amounts and percentages
 
-- **React 19** - Frontend framework
-- **TypeScript** - Type safety
-- **Vite** - Build tool and development server
-- **Tailwind CSS** - Styling framework
-- **Shadcn-UI** - UI component library
-- **Lucide React** - Icons
+### Currency Features
 
-## Project Structure
+- **Mixed Currencies**: Each input can use different currencies
+- **Live Rates**: Exchange rates update automatically
+- **Manual Refresh**: Click refresh button to update rates
+- **Fallback Rates**: Calculator works even if API is down
 
+### Example Workflows
+
+**Scenario 1: Same Currency**
+- Both incomes in ARS, bill in ARS
+- Traditional proportional split
+
+**Scenario 2: Mixed Currencies**
+- Person A: USD income
+- Person B: ARS income  
+- Bill: BRL
+- System handles all conversions automatically
+
+## 🔧 Configuration
+
+### Environment Variables
+```bash
+# Optional: Custom API endpoints
+VITE_CURRENCY_API_URL=https://dolarapi.com/v1/cotizaciones
 ```
-src/
-├── components/
-│   ├── ui/              # Shadcn-UI components
-│   └── ProportionalPaymentCalculator.tsx
-├── lib/
-│   └── utils.ts         # Utility functions
-├── App.tsx              # Main application component
-└── main.tsx             # Application entry point
-```
 
-## Contributing
+### Currency Settings
+- **Base Currency**: ARS (Argentine Peso)
+- **Supported Currencies**: ARS, USD, BRL
+- **Rate Source**: DolarAPI.com
+- **Cache Duration**: 5 minutes
+- **Fallback Rates**: Built-in reasonable defaults
+
+## 🧪 Testing
+
+### Manual Testing
+1. Test with same currencies
+2. Test with mixed currencies
+3. Test with edge cases (very small/large amounts)
+4. Test network failures (disconnect internet)
+5. Test mobile responsiveness
+
+### Currency Validation
+- Rates should be within reasonable ranges
+- Calculations should be mathematically correct
+- UI should handle loading states gracefully
+
+## 🎯 Key Features Explained
+
+### **Proportional Fairness**
+Unlike 50/50 splits, this calculator ensures income equity. A person earning twice as much pays twice the amount, but the same percentage of their income.
+
+### **Currency Intelligence**
+The system automatically converts all amounts to a common base (ARS) for calculation, ensuring accurate proportional splits even when mixing currencies.
+
+### **Real-time Data**
+Exchange rates are fetched live from DolarAPI, providing up-to-date conversion rates for accurate calculations.
+
+### **User Experience**
+The interface is designed to be intuitive, with clear visual feedback, loading states, and error handling for a smooth user experience.
+
+## 🤝 Contributing
 
 1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## License
+### Development Guidelines
+- Follow TypeScript best practices
+- Use conventional commit messages
+- Add tests for new features
+- Maintain responsive design
+- Update documentation
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+## 📄 License
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🔗 Related Projects
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- **[Scraper Tool](./scraper/)**: Additional web scraping tools for DolarHoy.com
+- **DolarAPI**: Exchange rate data source
+- **Shadcn-UI**: Component library used
+
+## 🏆 Acknowledgments
+
+- **DolarAPI** for providing free exchange rate data
+- **Shadcn** for the beautiful UI components
+- **Vercel** for the excellent developer experience
+- **React Team** for the amazing framework
+
+---
+
+**Made with ❤️ for fair bill splitting across currencies**

@@ -4,6 +4,9 @@ import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Button } from './ui/button'
 import { Calculator, DollarSign, Percent, User } from 'lucide-react'
+import { useCurrencyRates } from '../hooks/useCurrencyRates'
+import CurrencyRatesCard from './CurrencyRatesCard'
+import CurrencySelector, { type Currency } from './CurrencySelector'
 
 interface CalculationResult {
   personAPayment: number
@@ -16,8 +19,25 @@ export default function ProportionalPaymentCalculator() {
   const [personAIncome, setPersonAIncome] = useState<string>('')
   const [personBIncome, setPersonBIncome] = useState<string>('')
   const [totalBill, setTotalBill] = useState<string>('')
+  const [personACurrency, setPersonACurrency] = useState<Currency>('ARS')
+  const [personBCurrency, setPersonBCurrency] = useState<Currency>('ARS')
+  const [billCurrency, setBillCurrency] = useState<Currency>('ARS')
   const [result, setResult] = useState<CalculationResult | null>(null)
   const [errors, setErrors] = useState<string[]>([])
+
+  // Currency rates hook
+  const { rates, loading: ratesLoading, error: ratesError, lastUpdated, refetch } = useCurrencyRates()
+
+  // Currency conversion helper
+  const convertToARS = (amount: number, fromCurrency: Currency): number => {
+    if (!rates || fromCurrency === 'ARS') return amount
+    return amount * rates[fromCurrency]
+  }
+
+  const convertFromARS = (amount: number, toCurrency: Currency): number => {
+    if (!rates || toCurrency === 'ARS') return amount
+    return amount / rates[toCurrency]
+  }
 
   const validateInputs = (): boolean => {
     const newErrors: string[] = []
@@ -37,27 +57,40 @@ export default function ProportionalPaymentCalculator() {
     if (!totalBill || isNaN(bill) || bill <= 0) {
       newErrors.push('Total bill must be a positive number')
     }
+
+    if (!rates && !ratesLoading) {
+      newErrors.push('Currency rates not available. Please try refreshing.')
+    }
     
     setErrors(newErrors)
     return newErrors.length === 0
   }
 
   const calculatePayments = () => {
-    if (!validateInputs()) return
+    if (!validateInputs() || !rates) return
     
     const incomeA = parseFloat(personAIncome)
     const incomeB = parseFloat(personBIncome)
     const bill = parseFloat(totalBill)
     
-    const totalIncome = incomeA + incomeB
+    // Convert all amounts to ARS for calculation
+    const incomeA_ARS = convertToARS(incomeA, personACurrency)
+    const incomeB_ARS = convertToARS(incomeB, personBCurrency)
+    const bill_ARS = convertToARS(bill, billCurrency)
     
-    // Calculate proportional payments
-    const personAPayment = bill * (incomeA / totalIncome)
-    const personBPayment = bill * (incomeB / totalIncome)
+    const totalIncome_ARS = incomeA_ARS + incomeB_ARS
+    
+    // Calculate proportional payments in ARS
+    const personAPayment_ARS = bill_ARS * (incomeA_ARS / totalIncome_ARS)
+    const personBPayment_ARS = bill_ARS * (incomeB_ARS / totalIncome_ARS)
+    
+    // Convert payments back to bill currency for display
+    const personAPayment = convertFromARS(personAPayment_ARS, billCurrency)
+    const personBPayment = convertFromARS(personBPayment_ARS, billCurrency)
     
     // Calculate percentages of income
-    const personAPercentage = (personAPayment / incomeA) * 100
-    const personBPercentage = (personBPayment / incomeB) * 100
+    const personAPercentage = (personAPayment_ARS / incomeA_ARS) * 100
+    const personBPercentage = (personBPayment_ARS / incomeB_ARS) * 100
     
     setResult({
       personAPayment,
@@ -71,14 +104,24 @@ export default function ProportionalPaymentCalculator() {
     setPersonAIncome('')
     setPersonBIncome('')
     setTotalBill('')
+    setPersonACurrency('ARS')
+    setPersonBCurrency('ARS')
+    setBillCurrency('ARS')
     setResult(null)
     setErrors([])
   }
 
-  const formatCurrency = (amount: number): string => {
+  const formatCurrency = (amount: number, currency: Currency = billCurrency): string => {
+    const currencyMap = {
+      ARS: { code: 'ARS', symbol: '$' },
+      USD: { code: 'USD', symbol: '$' },
+      BRL: { code: 'BRL', symbol: 'R$' }
+    }
+    
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
+      currency: currencyMap[currency].code,
+      minimumFractionDigits: 2
     }).format(amount)
   }
 
@@ -88,6 +131,15 @@ export default function ProportionalPaymentCalculator() {
 
   return (
     <div className="space-y-6">
+      {/* Currency Rates Card */}
+      <CurrencyRatesCard
+        rates={rates}
+        loading={ratesLoading}
+        error={ratesError}
+        lastUpdated={lastUpdated}
+        onRefresh={refetch}
+      />
+
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
@@ -101,51 +153,75 @@ export default function ProportionalPaymentCalculator() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="personA">
+              <Label htmlFor="personA" className="flex items-center gap-2">
 								<User className='h-4 w-4' />
 								Person A Income
 							</Label>
-              <Input
-                id="personA"
-                type="number"
-                placeholder="Enter Person A's income"
-                value={personAIncome}
-                onChange={(e: any) => setPersonAIncome(e.target.value)}
-                min="0"
-                step="0.01"
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="personA"
+                  type="number"
+                  placeholder="Enter Person A's income"
+                  value={personAIncome}
+                  onChange={(e: any) => setPersonAIncome(e.target.value)}
+                  min="0"
+                  step="0.01"
+                  className="flex-1"
+                />
+                <CurrencySelector 
+                  value={personACurrency} 
+                  onChange={setPersonACurrency}
+                  disabled={ratesLoading}
+                />
+              </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="personB">
+              <Label htmlFor="personB" className="flex items-center gap-2">
 								<User className='h-4 w-4' />
 								Person B Income
 							</Label>
-              <Input
-                id="personB"
-                type="number"
-                placeholder="Enter Person B's income"
-                value={personBIncome}
-                onChange={(e: any) => setPersonBIncome(e.target.value)}
-                min="0"
-                step="0.01"
-              />
+              <div className="flex gap-2">
+                <Input
+                  id="personB"
+                  type="number"
+                  placeholder="Enter Person B's income"
+                  value={personBIncome}
+                  onChange={(e: any) => setPersonBIncome(e.target.value)}
+                  min="0"
+                  step="0.01"
+                  className="flex-1"
+                />
+                <CurrencySelector 
+                  value={personBCurrency} 
+                  onChange={setPersonBCurrency}
+                  disabled={ratesLoading}
+                />
+              </div>
             </div>
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="totalBill">
+            <Label htmlFor="totalBill" className="flex items-center gap-2">
 							<DollarSign className='h-4 w-4' />
 							Total Bill Amount
 						</Label>
-            <Input
-              id="totalBill"
-              type="number"
-              placeholder="Enter total bill amount"
-              value={totalBill}
-              onChange={(e: any) => setTotalBill(e.target.value)}
-              min="0"
-              step="0.01"
-            />
+            <div className="flex gap-2">
+              <Input
+                id="totalBill"
+                type="number"
+                placeholder="Enter total bill amount"
+                value={totalBill}
+                onChange={(e: any) => setTotalBill(e.target.value)}
+                min="0"
+                step="0.01"
+                className="flex-1"
+              />
+              <CurrencySelector 
+                value={billCurrency} 
+                onChange={setBillCurrency}
+                disabled={ratesLoading}
+              />
+            </div>
           </div>
 
           {errors.length > 0 && (
@@ -159,8 +235,12 @@ export default function ProportionalPaymentCalculator() {
           )}
 
           <div className="flex gap-2">
-            <Button onClick={calculatePayments} className="flex-1">
-              Calculate Payments
+            <Button 
+              onClick={calculatePayments} 
+              className="flex-1"
+              disabled={ratesLoading || !rates}
+            >
+              {ratesLoading ? 'Loading rates...' : 'Calculate Payments'}
             </Button>
             <Button onClick={resetCalculator} variant="outline">
               Reset
