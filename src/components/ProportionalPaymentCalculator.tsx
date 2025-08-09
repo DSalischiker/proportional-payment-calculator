@@ -176,7 +176,7 @@ export default function ProportionalPaymentCalculator() {
               <DollarSign className="h-5 w-5" />
               Payment Breakdown
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="flex justify-start">
               Fair split based on proportional income
             </CardDescription>
           </CardHeader>
