@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Button } from './ui/button'
-import { Calculator, DollarSign, Percent } from 'lucide-react'
+import { Calculator, DollarSign, Percent, User } from 'lucide-react'
 
 interface CalculationResult {
   personAPayment: number
@@ -94,14 +94,17 @@ export default function ProportionalPaymentCalculator() {
             <Calculator className="h-5 w-5" />
             Payment Calculator
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="flex justify-start">
             Calculate how to split bills proportionally based on income differences
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="personA">Person A Income</Label>
+              <Label htmlFor="personA">
+								<User className='h-4 w-4' />
+								Person A Income
+							</Label>
               <Input
                 id="personA"
                 type="number"
@@ -113,7 +116,10 @@ export default function ProportionalPaymentCalculator() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="personB">Person B Income</Label>
+              <Label htmlFor="personB">
+								<User className='h-4 w-4' />
+								Person B Income
+							</Label>
               <Input
                 id="personB"
                 type="number"
@@ -127,7 +133,10 @@ export default function ProportionalPaymentCalculator() {
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor="totalBill">Total Bill Amount</Label>
+            <Label htmlFor="totalBill">
+							<DollarSign className='h-4 w-4' />
+							Total Bill Amount
+						</Label>
             <Input
               id="totalBill"
               type="number"
