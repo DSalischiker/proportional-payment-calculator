@@ -115,7 +115,10 @@ export default function ProportionalPaymentCalculator() {
     const currencyMap = {
       ARS: { code: 'ARS', symbol: '$' },
       USD: { code: 'USD', symbol: '$' },
-      BRL: { code: 'BRL', symbol: 'R$' }
+      EUR: { code: 'EUR', symbol: '€' },
+      BRL: { code: 'BRL', symbol: 'R$' },
+      CLP: { code: 'CLP', symbol: '$' },
+      UYU: { code: 'UYU', symbol: '$U' }
     }
     
     return new Intl.NumberFormat('en-US', {

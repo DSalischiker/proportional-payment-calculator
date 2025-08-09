@@ -97,7 +97,7 @@ export default function CurrencyRatesCard({
             </div>
           ) : rates ? (
             <div className="space-y-3">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 <div className="flex items-center justify-between p-3 bg-muted rounded-lg transition-colors hover:bg-muted/80">
                   <div className="flex items-center gap-2">
                     <Badge variant="secondary">USD</Badge>
@@ -110,11 +110,41 @@ export default function CurrencyRatesCard({
                 
                 <div className="flex items-center justify-between p-3 bg-muted rounded-lg transition-colors hover:bg-muted/80">
                   <div className="flex items-center gap-2">
+                    <Badge variant="secondary">EUR</Badge>
+                    <span className="text-sm font-medium">Euro</span>
+                  </div>
+                  <span className="font-semibold">
+                    {formatCurrency(rates.EUR)}
+                  </span>
+                </div>
+                
+                <div className="flex items-center justify-between p-3 bg-muted rounded-lg transition-colors hover:bg-muted/80">
+                  <div className="flex items-center gap-2">
                     <Badge variant="secondary">BRL</Badge>
                     <span className="text-sm font-medium">Brazilian Real</span>
                   </div>
                   <span className="font-semibold">
                     {formatCurrency(rates.BRL)}
+                  </span>
+                </div>
+                
+                <div className="flex items-center justify-between p-3 bg-muted rounded-lg transition-colors hover:bg-muted/80">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary">CLP</Badge>
+                    <span className="text-sm font-medium">Chilean Peso</span>
+                  </div>
+                  <span className="font-semibold">
+                    {formatCurrency(rates.CLP)}
+                  </span>
+                </div>
+                
+                <div className="flex items-center justify-between p-3 bg-muted rounded-lg transition-colors hover:bg-muted/80">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="secondary">UYU</Badge>
+                    <span className="text-sm font-medium">Uruguayan Peso</span>
+                  </div>
+                  <span className="font-semibold">
+                    {formatCurrency(rates.UYU)}
                   </span>
                 </div>
                 

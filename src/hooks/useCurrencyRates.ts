@@ -10,9 +10,12 @@ export interface CurrencyRate {
 }
 
 export interface CurrencyRates {
-  USD: number
-  BRL: number
   ARS: number // Always 1 as base currency
+  USD: number
+  EUR: number
+  BRL: number
+  CLP: number
+  UYU: number
 }
 
 export interface UseCurrencyRatesReturn {
@@ -45,18 +48,24 @@ export function useCurrencyRates(): UseCurrencyRatesReturn {
       const data: CurrencyRate[] = await response.json()
       console.log('📊 Received currency data:', data)
       
-      // Extract USD and BRL rates (venta prices)
+      // Extract rates for all supported currencies (venta prices)
       const usdRate = data.find(item => item.moneda === 'USD')
+      const eurRate = data.find(item => item.moneda === 'EUR')
       const brlRate = data.find(item => item.moneda === 'BRL')
+      const clpRate = data.find(item => item.moneda === 'CLP')
+      const uyuRate = data.find(item => item.moneda === 'UYU')
       
-      if (!usdRate || !brlRate) {
-        throw new Error('Required currency rates not found in API response')
+      if (!usdRate || !eurRate || !brlRate || !clpRate || !uyuRate) {
+        throw new Error('Some required currency rates not found in API response')
       }
       
       const currencyRates: CurrencyRates = {
         ARS: 1, // Base currency
         USD: usdRate.venta,
-        BRL: brlRate.venta
+        EUR: eurRate.venta,
+        BRL: brlRate.venta,
+        CLP: clpRate.venta,
+        UYU: uyuRate.venta
       }
       
       console.log('✅ Processed currency rates:', currencyRates)
@@ -73,8 +82,11 @@ export function useCurrencyRates(): UseCurrencyRatesReturn {
       console.log('⚠️ Using fallback currency rates')
       setRates({
         ARS: 1,
-        USD: 1300, // Fallback rate
-        BRL: 244   // Fallback rate
+        USD: 1300,  // Fallback rate
+        EUR: 1550,  // Fallback rate
+        BRL: 244,   // Fallback rate
+        CLP: 1.37,  // Fallback rate
+        UYU: 33.06  // Fallback rate
       })
       setLastUpdated(new Date().toISOString())
     } finally {

@@ -1,6 +1,6 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 
-export type Currency = 'ARS' | 'USD' | 'BRL'
+export type Currency = 'ARS' | 'USD' | 'EUR' | 'BRL' | 'CLP' | 'UYU'
 
 export interface CurrencyOption {
   code: Currency
@@ -11,7 +11,10 @@ export interface CurrencyOption {
 export const CURRENCY_OPTIONS: CurrencyOption[] = [
   { code: 'ARS', name: 'Argentine Peso', symbol: '$' },
   { code: 'USD', name: 'US Dollar', symbol: '$' },
-  { code: 'BRL', name: 'Brazilian Real', symbol: 'R$' }
+  { code: 'EUR', name: 'Euro', symbol: '€' },
+  { code: 'BRL', name: 'Brazilian Real', symbol: 'R$' },
+  { code: 'CLP', name: 'Chilean Peso', symbol: '$' },
+  { code: 'UYU', name: 'Uruguayan Peso', symbol: '$U' }
 ]
 
 interface CurrencySelectorProps {
