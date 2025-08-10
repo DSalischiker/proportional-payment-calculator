@@ -69,10 +69,16 @@ export default function CurrencyRatesCard({
   }
 
   const CurrencyFlag = ({ currency }: { currency: string }) => {
+    const [imageError, setImageError] = useState(false)
     const flagSrc = getCurrencyFlag(currency)
     const fallbackEmoji = getFallbackEmoji(currency)
     
-    if (!flagSrc) {
+    // Reset error state when currency changes
+    useEffect(() => {
+      setImageError(false)
+    }, [currency])
+    
+    if (!flagSrc || imageError) {
       return <span className="text-base">{fallbackEmoji}</span>
     }
     
@@ -81,9 +87,7 @@ export default function CurrencyRatesCard({
         src={flagSrc} 
         alt={`${currency} flag`} 
         className="w-4 h-4 object-cover rounded-sm"
-        onError={(e) => {
-          e.currentTarget.outerHTML = `<span class="text-base">${fallbackEmoji}</span>`
-        }}
+        onError={() => setImageError(true)}
       />
     )
   }
