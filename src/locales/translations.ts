@@ -97,7 +97,7 @@ export const translations = {
     'calculator.totalBill': 'Monto Total del Gasto',
     'calculator.personAPlaceholder': 'Ingrese ingresos',
     'calculator.personBPlaceholder': 'Ingrese ingresos',
-    'calculator.billPlaceholder': 'Ingrese el monto total del gasto',
+    'calculator.billPlaceholder': 'Ingrese el gasto total',
     'calculator.calculate': 'Calcular Pagos',
     'calculator.loading': 'Cargando cotizaciones...',
     'calculator.reset': 'Reiniciar',

@@ -190,7 +190,7 @@ export default function CurrencyRatesCard({
         </div>
         <div className={`transition-all duration-300 ${isCollapsed ? 'max-h-0 opacity-0 overflow-hidden' : 'max-h-20 opacity-100'}`}>
           <CardDescription className="flex justify-between items-center relative">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center text-left gap-1">
               <span>{t('exchangeRates.description', { baseCurrency: getCurrencyName(baseCurrency) })}</span>
               <div className="relative" ref={dropdownRef}>
                 <Button
