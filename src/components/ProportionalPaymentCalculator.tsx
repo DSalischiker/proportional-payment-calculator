@@ -5,6 +5,7 @@ import { Label } from './ui/label'
 import { Button } from './ui/button'
 import { Calculator, DollarSign, Percent, User } from 'lucide-react'
 import { useCurrencyRates } from '../hooks/useCurrencyRates'
+import { useLocale } from '../contexts/LocaleContext'
 import CurrencyRatesCard from './CurrencyRatesCard'
 import CurrencySelector, { type Currency } from './CurrencySelector'
 
@@ -16,6 +17,7 @@ interface CalculationResult {
 }
 
 export default function ProportionalPaymentCalculator() {
+  const { t } = useLocale()
   const [personAIncome, setPersonAIncome] = useState<string>('')
   const [personBIncome, setPersonBIncome] = useState<string>('')
   const [totalBill, setTotalBill] = useState<string>('')
@@ -47,19 +49,19 @@ export default function ProportionalPaymentCalculator() {
     const bill = parseFloat(totalBill)
     
     if (!personAIncome || isNaN(incomeA) || incomeA <= 0) {
-      newErrors.push('Person A income must be a positive number')
+      newErrors.push(t('error.personAIncome'))
     }
     
     if (!personBIncome || isNaN(incomeB) || incomeB <= 0) {
-      newErrors.push('Person B income must be a positive number')
+      newErrors.push(t('error.personBIncome'))
     }
     
     if (!totalBill || isNaN(bill) || bill <= 0) {
-      newErrors.push('Total bill must be a positive number')
+      newErrors.push(t('error.totalBill'))
     }
 
     if (!rates && !ratesLoading) {
-      newErrors.push('Currency rates not available. Please try refreshing.')
+      newErrors.push(t('error.ratesNotAvailable'))
     }
     
     setErrors(newErrors)
@@ -134,23 +136,14 @@ export default function ProportionalPaymentCalculator() {
 
   return (
     <div className="space-y-6">
-      {/* Currency Rates Card */}
-      <CurrencyRatesCard
-        rates={rates}
-        loading={ratesLoading}
-        error={ratesError}
-        lastUpdated={lastUpdated}
-        onRefresh={refetch}
-      />
-
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Calculator className="h-5 w-5" />
-            Payment Calculator
+            {t('calculator.title')}
           </CardTitle>
           <CardDescription className="flex justify-start">
-            Calculate how to split bills proportionally based on income differences
+            {t('calculator.description')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -158,13 +151,13 @@ export default function ProportionalPaymentCalculator() {
             <div className="space-y-2">
               <Label htmlFor="personA" className="flex items-center gap-2">
 								<User className='h-4 w-4' />
-								Person A Income
+								{t('calculator.personAIncome')}
 							</Label>
               <div className="flex gap-2">
                 <Input
                   id="personA"
                   type="number"
-                  placeholder="Enter Person A's income"
+                  placeholder={t('calculator.personAPlaceholder')}
                   value={personAIncome}
                   onChange={(e: any) => setPersonAIncome(e.target.value)}
                   min="0"
@@ -181,13 +174,13 @@ export default function ProportionalPaymentCalculator() {
             <div className="space-y-2">
               <Label htmlFor="personB" className="flex items-center gap-2">
 								<User className='h-4 w-4' />
-								Person B Income
+								{t('calculator.personBIncome')}
 							</Label>
               <div className="flex gap-2">
                 <Input
                   id="personB"
                   type="number"
-                  placeholder="Enter Person B's income"
+                  placeholder={t('calculator.personBPlaceholder')}
                   value={personBIncome}
                   onChange={(e: any) => setPersonBIncome(e.target.value)}
                   min="0"
@@ -206,13 +199,13 @@ export default function ProportionalPaymentCalculator() {
           <div className="space-y-2">
             <Label htmlFor="totalBill" className="flex items-center gap-2">
 							<DollarSign className='h-4 w-4' />
-							Total Bill Amount
+							{t('calculator.totalBill')}
 						</Label>
             <div className="flex gap-2">
               <Input
                 id="totalBill"
                 type="number"
-                placeholder="Enter total bill amount"
+                placeholder={t('calculator.billPlaceholder')}
                 value={totalBill}
                 onChange={(e: any) => setTotalBill(e.target.value)}
                 min="0"
@@ -243,10 +236,10 @@ export default function ProportionalPaymentCalculator() {
               className="flex-1"
               disabled={ratesLoading || !rates}
             >
-              {ratesLoading ? 'Loading rates...' : 'Calculate Payments'}
+              {ratesLoading ? t('calculator.loading') : t('calculator.calculate')}
             </Button>
             <Button onClick={resetCalculator} variant="outline">
-              Reset
+              {t('calculator.reset')}
             </Button>
           </div>
         </CardContent>
@@ -257,17 +250,17 @@ export default function ProportionalPaymentCalculator() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <DollarSign className="h-5 w-5" />
-              Payment Breakdown
+              {t('breakdown.title')}
             </CardTitle>
             <CardDescription className="flex justify-start text-left">
-              Fair split based on proportional income
+              {t('breakdown.description')}
             </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="text-center p-4 bg-muted rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">Person A</h3>
+                  <h3 className="font-semibold text-lg mb-2">{t('breakdown.personA')}</h3>
                   <div className="space-y-2">
                     <div className="flex items-center justify-center gap-2">
                       <DollarSign className="h-4 w-4" />
@@ -278,7 +271,7 @@ export default function ProportionalPaymentCalculator() {
                     <div className="flex items-center justify-center gap-2 text-muted-foreground">
                       <Percent className="h-4 w-4" />
                       <span>
-                        {formatPercentage(result.personAPercentage)} of income
+                        {formatPercentage(result.personAPercentage)} {t('breakdown.ofIncome')}
                       </span>
                     </div>
                   </div>
@@ -287,7 +280,7 @@ export default function ProportionalPaymentCalculator() {
 
               <div className="space-y-4">
                 <div className="text-center p-4 bg-muted rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">Person B</h3>
+                  <h3 className="font-semibold text-lg mb-2">{t('breakdown.personB')}</h3>
                   <div className="space-y-2">
                     <div className="flex items-center justify-center gap-2">
                       <DollarSign className="h-4 w-4" />
@@ -298,7 +291,7 @@ export default function ProportionalPaymentCalculator() {
                     <div className="flex items-center justify-center gap-2 text-muted-foreground">
                       <Percent className="h-4 w-4" />
                       <span>
-                        {formatPercentage(result.personBPercentage)} of income
+                        {formatPercentage(result.personBPercentage)} {t('breakdown.ofIncome')}
                       </span>
                     </div>
                   </div>
@@ -307,28 +300,37 @@ export default function ProportionalPaymentCalculator() {
             </div>
 
             <div className="mt-6 p-4 bg-accent rounded-lg">
-              <h4 className="font-semibold mb-2">Summary</h4>
+              <h4 className="font-semibold mb-2">{t('breakdown.summary')}</h4>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                 <div>
-                  <span className="text-muted-foreground">Total Bill:</span>
+                  <span className="text-muted-foreground">{t('breakdown.totalBill')}</span>
                   <p className="font-semibold">{formatCurrency(parseFloat(totalBill))}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Person A Pays:</span>
+                  <span className="text-muted-foreground">{t('breakdown.personAPays')}</span>
                   <p className="font-semibold">{formatCurrency(result.personAPayment)}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">Person B Pays:</span>
+                  <span className="text-muted-foreground">{t('breakdown.personBPays')}</span>
                   <p className="font-semibold">{formatCurrency(result.personBPayment)}</p>
                 </div>
               </div>
               <p className="text-xs text-muted-foreground mt-2">
-                Both people pay the same percentage ({formatPercentage(result.personAPercentage)}) of their respective incomes.
+                {t('breakdown.samePercentage', { percentage: formatPercentage(result.personAPercentage) })}
               </p>
             </div>
           </CardContent>
         </Card>
       )}
+
+      {/* Currency Rates Card */}
+      <CurrencyRatesCard
+        rates={rates}
+        loading={ratesLoading}
+        error={ratesError}
+        lastUpdated={lastUpdated}
+        onRefresh={refetch}
+      />
     </div>
   )
 }

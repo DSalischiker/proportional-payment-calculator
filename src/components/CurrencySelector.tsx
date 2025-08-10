@@ -9,12 +9,12 @@ export interface CurrencyOption {
 }
 
 export const CURRENCY_OPTIONS: CurrencyOption[] = [
-  { code: 'ARS', name: 'Argentine Peso', symbol: '$' },
-  { code: 'USD', name: 'US Dollar', symbol: '$' },
+  { code: 'ARS', name: 'Argentine Peso', symbol: 'ARS$' },
+  { code: 'USD', name: 'US Dollar', symbol: 'US$' },
   { code: 'EUR', name: 'Euro', symbol: '€' },
-  { code: 'BRL', name: 'Brazilian Real', symbol: 'R$' },
-  { code: 'CLP', name: 'Chilean Peso', symbol: '$' },
-  { code: 'UYU', name: 'Uruguayan Peso', symbol: '$U' }
+  { code: 'BRL', name: 'Brazilian Real', symbol: 'BRL$' },
+  { code: 'CLP', name: 'Chilean Peso', symbol: 'CLP$' },
+  { code: 'UYU', name: 'Uruguayan Peso', symbol: 'UYU$' }
 ]
 
 interface CurrencySelectorProps {
@@ -26,7 +26,7 @@ interface CurrencySelectorProps {
 export default function CurrencySelector({ value, onChange, disabled }: CurrencySelectorProps) {
   return (
     <Select value={value} onValueChange={onChange} disabled={disabled}>
-      <SelectTrigger className="w-[100px]">
+      <SelectTrigger className="w-[140px]">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>
