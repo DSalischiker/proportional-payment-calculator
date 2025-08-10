@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
 import { Input } from './ui/input'
 import { Label } from './ui/label'
 import { Button } from './ui/button'
-import { Calculator, DollarSign, Percent, User } from 'lucide-react'
+import { Calculator, DollarSign, Pencil, Percent, User } from 'lucide-react'
 import { useCurrencyRates } from '../hooks/useCurrencyRates'
 import { useLocale } from '../contexts/LocaleContext'
 import CurrencyRatesCard from './CurrencyRatesCard'
@@ -16,6 +16,86 @@ interface CalculationResult {
   personBPercentage: number
 }
 
+// Inline editable component for person names
+interface EditableLabelProps {
+  value: string
+  onChange: (value: string) => void
+  placeholder: string
+  className?: string
+}
+
+function EditableLabel({ value, onChange, placeholder, className = '' }: EditableLabelProps) {
+  const [isEditing, setIsEditing] = useState(false)
+  const [editValue, setEditValue] = useState(value)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Update editValue when value prop changes
+  useEffect(() => {
+    if (!isEditing) {
+      setEditValue(value)
+    }
+  }, [value, isEditing])
+
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus()
+      inputRef.current.select()
+    }
+  }, [isEditing])
+
+  const handleSubmit = () => {
+    const newValue = editValue.trim() || placeholder
+    console.log('EditableLabel submitting:', editValue, '-> newValue:', newValue)
+    onChange(newValue)
+    setIsEditing(false)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSubmit()
+    } else if (e.key === 'Escape') {
+      setEditValue(value)
+      setIsEditing(false)
+    }
+  }
+
+  const handleBlur = () => {
+    handleSubmit()
+  }
+
+  const handleClick = () => {
+    console.log('EditableLabel clicked, current value:', value)
+    setEditValue(value)
+    setIsEditing(true)
+  }
+
+  if (isEditing) {
+    return (
+      <input
+        ref={inputRef}
+        type="text"
+        value={editValue}
+        onChange={(e) => setEditValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        onBlur={handleBlur}
+        className={`bg-transparent border-none outline-none font-medium text-sm px-0 py-1 ${className}`}
+        style={{ width: `${Math.max(editValue.length, placeholder.length)}ch` }}
+      />
+    )
+  }
+
+  return (
+    <p
+      onClick={handleClick}
+      className={`cursor-pointer hover:bg-muted/70 px-2 py-0 rounded transition-all font-medium text-sm text-primary border-b-1 border-dashed group ${className}`}
+      title="Haz clic para editar"
+    >
+      {value}
+      <Pencil className="size-3 ml-2 hidden group-hover:inline-block transition-opacity duration-200" />
+    </p>
+  )
+}
+
 export default function ProportionalPaymentCalculator() {
   const { t } = useLocale()
   const [personAIncome, setPersonAIncome] = useState<string>('')
@@ -24,6 +104,8 @@ export default function ProportionalPaymentCalculator() {
   const [personACurrency, setPersonACurrency] = useState<Currency>('ARS')
   const [personBCurrency, setPersonBCurrency] = useState<Currency>('ARS')
   const [billCurrency, setBillCurrency] = useState<Currency>('ARS')
+  const [personAName, setPersonAName] = useState<string>('Persona A')
+  const [personBName, setPersonBName] = useState<string>('Persona B')
   const [result, setResult] = useState<CalculationResult | null>(null)
   const [errors, setErrors] = useState<string[]>([])
 
@@ -109,6 +191,8 @@ export default function ProportionalPaymentCalculator() {
     setPersonACurrency('ARS')
     setPersonBCurrency('ARS')
     setBillCurrency('ARS')
+    setPersonAName(t('breakdown.personA'))
+    setPersonBName(t('breakdown.personB'))
     setResult(null)
     setErrors([])
   }
@@ -142,18 +226,23 @@ export default function ProportionalPaymentCalculator() {
             <Calculator className="h-5 w-5" />
             {t('calculator.title')}
           </CardTitle>
-          <CardDescription className="flex justify-start">
+          <CardDescription className="flex justify-start text-left">
             {t('calculator.description')}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="personA" className="flex items-center gap-2">
-								<User className='h-4 w-4' />
-								{t('calculator.personAIncome')}
-							</Label>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2 mb-2">
+                <User className='h-4 w-4' />
+                <span className="text-sm font-medium">{t('calculator.income')}</span>
+                <EditableLabel
+                  value={personAName}
+                  onChange={setPersonAName}
+                  placeholder={t('breakdown.personA')}
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Input
                   id="personA"
                   type="number"
@@ -172,11 +261,16 @@ export default function ProportionalPaymentCalculator() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="personB" className="flex items-center gap-2">
-								<User className='h-4 w-4' />
-								{t('calculator.personBIncome')}
-							</Label>
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2 mb-2">
+                <User className='h-4 w-4' />
+                <span className="text-sm font-medium">{t('calculator.income')}</span>
+                <EditableLabel
+                  value={personBName}
+                  onChange={setPersonBName}
+                  placeholder={t('breakdown.personB')}
+                />
+              </div>
+              <div className="flex flex-col sm:flex-row gap-2">
                 <Input
                   id="personB"
                   type="number"
@@ -201,7 +295,7 @@ export default function ProportionalPaymentCalculator() {
 							<DollarSign className='h-4 w-4' />
 							{t('calculator.totalBill')}
 						</Label>
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Input
                 id="totalBill"
                 type="number"
@@ -260,7 +354,7 @@ export default function ProportionalPaymentCalculator() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="text-center p-4 bg-muted rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">{t('breakdown.personA')}</h3>
+                  <h3 className="font-semibold text-lg mb-2">{personAName}</h3>
                   <div className="space-y-2">
                     <div className="flex items-center justify-center gap-2">
                       <DollarSign className="h-4 w-4" />
@@ -280,7 +374,7 @@ export default function ProportionalPaymentCalculator() {
 
               <div className="space-y-4">
                 <div className="text-center p-4 bg-muted rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">{t('breakdown.personB')}</h3>
+                  <h3 className="font-semibold text-lg mb-2">{personBName}</h3>
                   <div className="space-y-2">
                     <div className="flex items-center justify-center gap-2">
                       <DollarSign className="h-4 w-4" />
@@ -307,11 +401,11 @@ export default function ProportionalPaymentCalculator() {
                   <p className="font-semibold">{formatCurrency(parseFloat(totalBill))}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">{t('breakdown.personAPays')}</span>
+                  <span className="text-muted-foreground">{personAName} {t('breakdown.pays')}</span>
                   <p className="font-semibold">{formatCurrency(result.personAPayment)}</p>
                 </div>
                 <div>
-                  <span className="text-muted-foreground">{t('breakdown.personBPays')}</span>
+                  <span className="text-muted-foreground">{personBName} {t('breakdown.pays')}</span>
                   <p className="font-semibold">{formatCurrency(result.personBPayment)}</p>
                 </div>
               </div>
