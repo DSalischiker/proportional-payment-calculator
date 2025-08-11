@@ -75,12 +75,13 @@ export default function CurrencyRatesCard({
 
   const formatCurrency = (amount: number, currency: Currency = baseCurrency): string => {
     const symbol = getCurrencySymbol(currency)
-    
-    // For simple display, we'll use the custom symbol format
-    return `${symbol}${amount.toLocaleString('en-US', { 
+    const formattedAmount = amount.toLocaleString('en-US', { 
       minimumFractionDigits: 2,
       maximumFractionDigits: 2 
-    })}`
+    })
+    
+    // Return HTML structure with smaller symbol
+    return `<span class="text-xs opacity-75">${symbol}</span><span class="text-sm">${formattedAmount}</span>`
   }
 
   const convertCurrency = (amount: number, fromCurrency: Currency, toCurrency: Currency): number => {
@@ -257,9 +258,10 @@ export default function CurrencyRatesCard({
                           {getCurrencyName(currency)}
                         </span>
                       </div>
-                      <span className="font-semibold">
-                        {formatCurrency(displayRate, baseCurrency)}
-                      </span>
+                      <span 
+                        className="font-semibold"
+                        dangerouslySetInnerHTML={{ __html: formatCurrency(displayRate, baseCurrency) }}
+                      />
                     </div>
                   )
                 })}
