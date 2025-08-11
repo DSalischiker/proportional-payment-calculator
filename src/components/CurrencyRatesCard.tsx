@@ -53,41 +53,17 @@ export default function CurrencyRatesCard({
       UYU: '/src/assets/uruguay.png',
       ARS: '/src/assets/arg.png'
     }
-    return flagMap[currency] || ''
-  }
-
-  const getFallbackEmoji = (currency: string): string => {
-    const emojiMap: Record<string, string> = {
-      USD: '🇺🇸',
-      EUR: '🇪🇺', 
-      BRL: '🇧🇷',
-      CLP: '🇨🇱',
-      UYU: '🇺🇾',
-      ARS: '🇦🇷'
-    }
-    return emojiMap[currency] || '💱'
+    return flagMap[currency] || '/src/assets/arg.png' // Default to ARS flag if currency not found
   }
 
   const CurrencyFlag = ({ currency }: { currency: string }) => {
-    const [imageError, setImageError] = useState(false)
     const flagSrc = getCurrencyFlag(currency)
-    const fallbackEmoji = getFallbackEmoji(currency)
-    
-    // Reset error state when currency changes
-    useEffect(() => {
-      setImageError(false)
-    }, [currency])
-    
-    if (!flagSrc || imageError) {
-      return <span className="text-base">{fallbackEmoji}</span>
-    }
     
     return (
       <img 
         src={flagSrc} 
         alt={`${currency} flag`} 
         className="w-4 h-4 object-cover rounded-sm"
-        onError={() => setImageError(true)}
       />
     )
   }
