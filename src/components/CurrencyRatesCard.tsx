@@ -46,14 +46,14 @@ export default function CurrencyRatesCard({
 
   const getCurrencyFlag = (currency: string): string => {
     const flagMap: Record<string, string> = {
-      USD: '/src/assets/us.png',
-      EUR: '/src/assets/1f1ea-1f1fa.png', 
-      BRL: '/src/assets/brazil.png',
-      CLP: '/src/assets/chile.png',
-      UYU: '/src/assets/uruguay.png',
-      ARS: '/src/assets/arg.png'
+      USD: '/us.png',
+      EUR: '/ue.png', 
+      BRL: '/brazil.png',
+      CLP: '/chile.png',
+      UYU: '/uruguay.png',
+      ARS: '/arg.png'
     }
-    return flagMap[currency] || '/src/assets/arg.png' // Default to ARS flag if currency not found
+    return flagMap[currency] || '/arg.png' // Default to ARS flag if currency not found
   }
 
   const CurrencyFlag = ({ currency }: { currency: string }) => {
