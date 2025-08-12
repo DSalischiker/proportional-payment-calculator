@@ -58,6 +58,7 @@ export const translations = {
     'breakdown.personAPays': 'Person A Pays:',
     'breakdown.personBPays': 'Person B Pays:',
     'breakdown.samePercentage': 'Both people pay the same percentage ({percentage}) of their respective incomes.',
+    'breakdown.paymentInOtherCurrencies': 'Payment in other currencies:',
     
     // Language selector
     'language.english': 'English',
@@ -120,6 +121,7 @@ export const translations = {
     'breakdown.personAPays': 'Persona A Paga:',
     'breakdown.personBPays': 'Persona B Paga:',
     'breakdown.samePercentage': 'Ambas personas pagan el mismo porcentaje ({percentage}) de sus respectivos ingresos.',
+    'breakdown.paymentInOtherCurrencies': 'Monto en otras monedas:',
     
     // Language selector
     'language.english': 'Inglés',
