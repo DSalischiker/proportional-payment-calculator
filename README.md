@@ -1,6 +1,6 @@
 # Proportional Payment Calculator
 
-A sophisticated React-based calculator that helps two people split bills proportionally based on their income differences, ensuring both parties pay the same percentage of their respective incomes. Now with **multi-currency support** for ARS, USD, and BRL!
+A sophisticated React-based calculator that helps two people split bills proportionally based on their income differences, ensuring both parties pay the same percentage of their respective incomes. Now with **multi-currency support**, **user authentication**, and **calculation history**!
 
 ## ✨ Features
 
@@ -9,8 +9,14 @@ A sophisticated React-based calculator that helps two people split bills proport
 - **Real-time Calculation**: Instant results as you input values
 - **Input Validation**: Ensures all inputs are valid positive numbers
 
+### 🔐 **Authentication & History**
+- **Google OAuth**: Secure sign-in with Google accounts
+- **Calculation History**: Automatically saves all calculations
+- **Personal Dashboard**: View statistics and past calculations
+- **Data Security**: Row-level security with Supabase
+
 ### 🌍 **Multi-Currency Support**
-- **Three Currencies**: Argentine Peso (ARS), US Dollar (USD), Brazilian Real (BRL)
+- **Six Currencies**: ARS, USD, EUR, BRL, CLP, UYU
 - **Live Exchange Rates**: Real-time rates from DolarAPI
 - **Mixed Currency Inputs**: Each person can use different currencies
 - **Smart Conversion**: Automatic currency conversion for accurate calculations
@@ -20,8 +26,8 @@ A sophisticated React-based calculator that helps two people split bills proport
 - **Modern UI**: Built with Shadcn-UI components and Tailwind CSS
 - **Responsive Design**: Works perfectly on desktop and mobile devices
 - **Dark Mode**: Sleek dark theme by default
-- **Loading States**: Visual feedback during rate fetching
-- **Error Handling**: Graceful fallbacks when API is unavailable
+- **Loading States**: Visual feedback during operations
+- **Error Handling**: Graceful fallbacks and user-friendly messages
 
 ## 🚀 How It Works
 
@@ -55,6 +61,17 @@ Both pay exactly **1.03%** of their respective incomes!
 - **TypeScript** - Full type safety
 - **Vite** - Lightning-fast build tool
 - **Tailwind CSS** - Utility-first styling
+
+### **Backend & Database**
+- **Supabase** - Backend-as-a-Service
+- **PostgreSQL** - Robust relational database
+- **Row Level Security** - Database-level access control
+- **Real-time subscriptions** - Live data updates
+
+### **Authentication**
+- **Supabase Auth** - Secure authentication system
+- **Google OAuth** - Social login integration
+- **JWT Tokens** - Stateless authentication
 
 ### **UI Components**
 - **Shadcn-UI** - Beautiful, accessible component library
@@ -100,6 +117,7 @@ proportional-payment-calculator/
 ### Prerequisites
 - **Node.js** 18+ 
 - **npm** or **yarn**
+- **Supabase Account** (free tier available)
 
 ### Installation
 
@@ -114,24 +132,40 @@ cd proportional-payment-calculator
 npm install
 ```
 
-3. **Start development server:**
+3. **Set up Supabase:**
+   - Follow the detailed [Supabase Setup Guide](./SUPABASE_SETUP.md)
+   - Create your `.env.local` file with Supabase credentials
+
+4. **Start development server:**
 ```bash
 npm run dev
 ```
 
-4. **Open in browser:**
+5. **Open in browser:**
 Navigate to `http://localhost:5173`
 
 ## 📖 Usage Guide
 
-### Basic Usage
+### Getting Started
 
-1. **View Exchange Rates**: Current ARS rates are displayed at the top
+1. **Sign In**: Click "Sign in with Google" to authenticate
+2. **View Dashboard**: See your calculation statistics and history
+
+### Making Calculations
+
+1. **View Exchange Rates**: Current rates are displayed in the exchange rates card
 2. **Enter Person A Income**: Input amount and select currency
 3. **Enter Person B Income**: Input amount and select currency  
 4. **Enter Total Bill**: Input amount and select currency
 5. **Calculate**: Click "Calculate Payments" for instant results
-6. **Review Results**: See breakdown with amounts and percentages
+6. **Auto-Save**: Calculation is automatically saved to your history
+
+### Managing History
+
+- **View Past Calculations**: Scroll through your calculation history
+- **See Statistics**: Total calculations, most used currency, etc.
+- **Delete Calculations**: Remove unwanted entries from your history
+- **Refresh Data**: Update your history and statistics
 
 ### Currency Features
 

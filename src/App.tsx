@@ -1,10 +1,23 @@
 import ProportionalPaymentCalculator from './components/ProportionalPaymentCalculator.tsx'
 import LanguageSelector from './components/LanguageSelector.tsx'
+import AuthCard from './components/AuthCard.tsx'
+import UserMenu from './components/UserMenu.tsx'
+import CalculationHistoryCard from './components/CalculationHistoryCard.tsx'
 import { LocaleProvider, useLocale } from './contexts/LocaleContext.tsx'
+import { AuthProvider, useAuth } from './contexts/AuthContext.tsx'
 import './App.css'
 
 function AppContent() {
   const { t } = useLocale()
+  const { user, loading } = useAuth()
+  
+  if (loading) {
+    return (
+      <div className="dark min-h-screen w-full max-w-full overflow-x-hidden bg-background p-4 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
   
   return (
     <div className="dark min-h-screen w-full max-w-full overflow-x-hidden bg-background p-4">
@@ -13,9 +26,23 @@ function AppContent() {
           <h1 className="text-3xl font-bold text-foreground text-left">
             {t('app.title')}
           </h1>
-          <LanguageSelector />
+          <div className="flex items-center gap-4">
+            <LanguageSelector />
+          </div>
         </div>
-        <ProportionalPaymentCalculator />
+        
+        {user && <UserMenu />}
+        
+        {!user ? (
+          <div className="space-y-6">
+            <AuthCard />
+          </div>
+        ) : (
+          <div className="space-y-6">
+            <ProportionalPaymentCalculator />
+            <CalculationHistoryCard />
+          </div>
+        )}
       </div>
     </div>
   )
@@ -24,7 +51,9 @@ function AppContent() {
 function App() {
   return (
     <LocaleProvider>
-      <AppContent />
+      <AuthProvider>
+        <AppContent />
+      </AuthProvider>
     </LocaleProvider>
   )
 }

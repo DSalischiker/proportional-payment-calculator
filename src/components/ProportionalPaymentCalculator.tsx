@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import { useCurrencyRates } from '../hooks/useCurrencyRates'
+import { useCalculationHistory } from '../hooks/useCalculationHistory'
+import { useAuth } from '../contexts/AuthContext'
 import CurrencyRatesCard from './CurrencyRatesCard'
 import PaymentCalculatorCard, { type PaymentCalculatorData } from './PaymentCalculatorCard'
 import PaymentResultCard from './PaymentResultCard'
@@ -16,8 +18,10 @@ export default function ProportionalPaymentCalculator() {
   const [result, setResult] = useState<CalculationResult | null>(null)
   const [lastCalculationData, setLastCalculationData] = useState<PaymentCalculatorData | null>(null)
 
-  // Currency rates hook
+  // Hooks
   const { rates, loading: ratesLoading, error: ratesError, lastUpdated, refetch } = useCurrencyRates()
+  const { addCalculation } = useCalculationHistory()
+  const { user } = useAuth()
 
   // Currency conversion helper
   const convertToARS = (amount: number, fromCurrency: Currency): number => {
@@ -30,7 +34,7 @@ export default function ProportionalPaymentCalculator() {
     return amount / rates[toCurrency]
   }
 
-  const calculatePayments = (data: PaymentCalculatorData) => {
+  const calculatePayments = async (data: PaymentCalculatorData) => {
     if (!rates) return
     
     setLastCalculationData(data)
@@ -58,12 +62,27 @@ export default function ProportionalPaymentCalculator() {
     const personAPercentage = (personAPayment_ARS / incomeA_ARS) * 100
     const personBPercentage = (personBPayment_ARS / incomeB_ARS) * 100
     
-    setResult({
+    const calculationResult = {
       personAPayment,
       personBPayment,
       personAPercentage,
       personBPercentage
-    })
+    }
+    
+    setResult(calculationResult)
+    
+    // Save to history if user is authenticated
+    if (user) {
+      try {
+        await addCalculation({
+          calculationData: data,
+          result: calculationResult
+        })
+      } catch (error) {
+        console.error('Failed to save calculation:', error)
+        // Don't block the UI if saving fails
+      }
+    }
   }
 
   const resetCalculator = () => {

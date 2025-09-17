@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
+import { Button } from './ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip'
-import { DollarSign, InfoIcon, Percent } from 'lucide-react'
+import { DollarSign, InfoIcon, Percent, MessageCircle } from 'lucide-react'
 import { useLocale } from '../contexts/LocaleContext'
 import { type Currency } from './CurrencySelector'
 
@@ -36,6 +37,26 @@ export default function PaymentResultCard({
   getPaymentInAllCurrencies
 }: PaymentResultCardProps) {
   const { t } = useLocale()
+
+  const shareViaWhatsApp = () => {
+    const message = `${t('breakdown.title')}
+
+${t('breakdown.summary')}:
+• ${t('breakdown.totalBill')} ${formatCurrency(parseFloat(totalBill))}
+
+${t('breakdown.description')}:
+• ${personAName}: ${formatCurrency(result.personAPayment)} (${formatPercentage(result.personAPercentage)} ${t('breakdown.ofIncome')})
+• ${personBName}: ${formatCurrency(result.personBPayment)} (${formatPercentage(result.personBPercentage)} ${t('breakdown.ofIncome')})
+
+${t('breakdown.samePercentage', { percentage: formatPercentage(result.personAPercentage) })}
+
+${t('breakdown.generatedBy')}`
+
+    const encodedMessage = encodeURIComponent(message)
+    const whatsappUrl = `https://wa.me/?text=${encodedMessage}`
+    
+    window.open(whatsappUrl, '_blank')
+  }
 
   return (
     <Card>
@@ -148,6 +169,18 @@ export default function PaymentResultCard({
           <p className="text-xs text-muted-foreground mt-2">
             {t('breakdown.samePercentage', { percentage: formatPercentage(result.personAPercentage) })}
           </p>
+          
+          {/* WhatsApp Share Button */}
+          <div className="mt-4 flex justify-center">
+            <Button 
+              onClick={shareViaWhatsApp}
+              className="bg-green-600 hover:bg-green-700 text-white gap-2"
+              size="sm"
+            >
+              <MessageCircle className="h-4 w-4" />
+              {t('breakdown.shareWhatsApp')}
+            </Button>
+          </div>
         </div>
       </CardContent>
     </Card>
