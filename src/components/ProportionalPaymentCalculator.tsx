@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { useCurrencyRates } from '../hooks/useCurrencyRates'
 import { useCalculationHistory } from '../hooks/useCalculationHistory'
 import { useAuth } from '../contexts/AuthContext'
-import CurrencyRatesCard from './CurrencyRatesCard'
 import PaymentCalculatorCard, { type PaymentCalculatorData } from './PaymentCalculatorCard'
 import PaymentResultCard from './PaymentResultCard'
 import { type Currency } from './CurrencySelector'
@@ -19,7 +18,7 @@ export default function ProportionalPaymentCalculator() {
   const [lastCalculationData, setLastCalculationData] = useState<PaymentCalculatorData | null>(null)
 
   // Hooks
-  const { rates, loading: ratesLoading, error: ratesError, lastUpdated, refetch } = useCurrencyRates()
+  const { rates } = useCurrencyRates()
   const { addCalculation } = useCalculationHistory()
   const { user } = useAuth()
 
@@ -163,15 +162,6 @@ export default function ProportionalPaymentCalculator() {
           getPaymentInAllCurrencies={getPaymentInAllCurrencies}
         />
       )}
-
-      {/* Currency Rates Card */}
-      <CurrencyRatesCard
-        rates={rates}
-        loading={ratesLoading}
-        error={ratesError}
-        lastUpdated={lastUpdated}
-        onRefresh={refetch}
-      />
     </div>
   )
 }

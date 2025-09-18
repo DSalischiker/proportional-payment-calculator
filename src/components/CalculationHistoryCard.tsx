@@ -107,7 +107,7 @@ export default function CalculationHistoryCard() {
             <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
               <Calculator className="h-4 w-4 text-muted-foreground" />
               <div>
-                <p className="text-sm font-medium">{stats.totalCalculations}</p>
+                <p className="text-sm text-left font-medium">{stats.totalCalculations}</p>
                 <p className="text-xs text-muted-foreground">{t('history.stats.total')}</p>
               </div>
             </div>
@@ -115,13 +115,13 @@ export default function CalculationHistoryCard() {
               <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
                 <TrendingUp className="h-4 w-4 text-muted-foreground" />
                 <div>
-                  <p className="text-sm font-medium">{stats.mostUsedCurrency}</p>
+                  <p className="text-sm text-left font-medium">{stats.mostUsedCurrency}</p>
                   <p className="text-xs text-muted-foreground">{t('history.stats.mostUsed')}</p>
                 </div>
               </div>
             )}
             {stats.lastCalculationDate && (
-              <div className="flex items-center gap-2 p-3 bg-muted/50 rounded-lg">
+              <div className="flex items-center text-left gap-2 p-3 bg-muted/50 rounded-lg">
                 <Clock className="h-4 w-4 text-muted-foreground" />
                 <div>
                   <p className="text-sm font-medium">{formatDate(stats.lastCalculationDate)}</p>

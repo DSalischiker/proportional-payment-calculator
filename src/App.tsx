@@ -1,8 +1,9 @@
-import ProportionalPaymentCalculator from './components/ProportionalPaymentCalculator.tsx'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import LanguageSelector from './components/LanguageSelector.tsx'
-import AuthCard from './components/AuthCard.tsx'
 import UserMenu from './components/UserMenu.tsx'
-import CalculationHistoryCard from './components/CalculationHistoryCard.tsx'
+import Navigation from './components/Navigation.tsx'
+import CalculatorPage from './pages/CalculatorPage.tsx'
+import HistoryPage from './pages/HistoryPage.tsx'
 import { LocaleProvider, useLocale } from './contexts/LocaleContext.tsx'
 import { AuthProvider, useAuth } from './contexts/AuthContext.tsx'
 import './App.css'
@@ -33,16 +34,13 @@ function AppContent() {
         
         {user && <UserMenu />}
         
-        {!user ? (
-          <div className="space-y-6">
-            <AuthCard />
-          </div>
-        ) : (
-          <div className="space-y-6">
-            <ProportionalPaymentCalculator />
-            <CalculationHistoryCard />
-          </div>
-        )}
+        <div className="space-y-6">
+          {user && <Navigation />}
+          <Routes>
+            <Route path="/" element={<CalculatorPage />} />
+            {user && <Route path="/history" element={<HistoryPage />} />}
+          </Routes>
+        </div>
       </div>
     </div>
   )
@@ -52,7 +50,9 @@ function App() {
   return (
     <LocaleProvider>
       <AuthProvider>
-        <AppContent />
+        <Router>
+          <AppContent />
+        </Router>
       </AuthProvider>
     </LocaleProvider>
   )

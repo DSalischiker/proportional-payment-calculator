@@ -5,12 +5,25 @@ export const translations = {
     // App
     'app.title': 'Proportional Payment Calculator',
     
+    // Navigation
+    'nav.calculator': 'Calculator',
+    'nav.history': 'History',
+    
     // Authentication
     'auth.welcome': 'Welcome',
     'auth.description': 'Sign in to save your calculations and access your history',
     'auth.signInWithGoogle': 'Sign in with Google',
     'auth.signingIn': 'Signing in...',
     'auth.signOut': 'Sign Out',
+    
+    // Sign In Prompt
+    'signInPrompt.title': 'Save Your Calculations',
+    'signInPrompt.description': 'Sign in to unlock additional features and never lose your calculations again!',
+    'signInPrompt.features.history': 'Calculation History',
+    'signInPrompt.features.historyDesc': 'View all your past calculations and statistics',
+    'signInPrompt.features.save': 'Auto-Save',
+    'signInPrompt.features.saveDesc': 'Automatically save every calculation you make',
+    'signInPrompt.continue': 'You can continue using the calculator without signing in',
     
     // History
     'history.title': 'Calculation History',
@@ -89,12 +102,25 @@ export const translations = {
     // App
     'app.title': 'Calculadora de Pago Proporcional',
     
+    // Navigation
+    'nav.calculator': 'Calculadora',
+    'nav.history': 'Historial',
+    
     // Authentication
     'auth.welcome': 'Bienvenido',
     'auth.description': 'Inicia sesión para guardar tus cálculos y acceder a tu historial',
     'auth.signInWithGoogle': 'Iniciar sesión con Google',
     'auth.signingIn': 'Iniciando sesión...',
     'auth.signOut': 'Cerrar Sesión',
+    
+    // Sign In Prompt
+    'signInPrompt.title': 'Guarda Tus Cálculos',
+    'signInPrompt.description': '¡Inicia sesión para desbloquear funciones adicionales y nunca perder tus cálculos!',
+    'signInPrompt.features.history': 'Historial de Cálculos',
+    'signInPrompt.features.historyDesc': 'Ve todos tus cálculos pasados y estadísticas',
+    'signInPrompt.features.save': 'Guardado Automático',
+    'signInPrompt.features.saveDesc': 'Guarda automáticamente cada cálculo que hagas',
+    'signInPrompt.continue': 'Puedes continuar usando la calculadora sin iniciar sesión',
     
     // History
     'history.title': 'Historial de Cálculos',
