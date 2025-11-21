@@ -13,7 +13,13 @@ interface CalculationResult {
   personBPercentage: number
 }
 
-export default function ProportionalPaymentCalculator() {
+interface ProportionalPaymentCalculatorProps {
+  onCalculationComplete?: () => void
+}
+
+export default function ProportionalPaymentCalculator({ 
+  onCalculationComplete 
+}: ProportionalPaymentCalculatorProps = {}) {
   const [result, setResult] = useState<CalculationResult | null>(null)
   const [lastCalculationData, setLastCalculationData] = useState<PaymentCalculatorData | null>(null)
 
@@ -81,6 +87,11 @@ export default function ProportionalPaymentCalculator() {
         console.error('Failed to save calculation:', error)
         // Don't block the UI if saving fails
       }
+    }
+    
+    // Notify parent component of calculation completion
+    if (onCalculationComplete) {
+      onCalculationComplete()
     }
   }
 
