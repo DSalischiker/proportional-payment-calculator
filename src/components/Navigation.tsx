@@ -13,7 +13,7 @@ export default function Navigation() {
 
   const navItems = [
     {
-      path: '/',
+      path: '/calculator',
       label: t('nav.calculator'),
       icon: Calculator
     },

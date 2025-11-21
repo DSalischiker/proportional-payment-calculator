@@ -117,7 +117,7 @@ export default function LandingPage() {
               size="lg"
               variant="outline"
               onClick={handleTryWithoutAccount}
-              className="gap-2 text-lg px-8 py-6"
+              className="gap-2 text-lg px-8 py-6 text-white"
             >
               <Calculator className="h-5 w-5" />
               {t('landing.cta.tryWithoutAccount')}

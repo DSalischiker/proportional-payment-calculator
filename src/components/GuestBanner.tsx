@@ -45,6 +45,7 @@ export default function GuestBanner({ variant = 'info' }: GuestBannerProps) {
               size="sm"
               onClick={() => {
                 // Scroll to features or show more info
+                navigate('/dashboard')
               }}
             >
               {t('guest.banner.info.learnMore')}

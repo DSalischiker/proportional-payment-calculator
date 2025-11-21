@@ -101,7 +101,7 @@ export async function getCalculationStats(userId: string) {
     totalCalculations: calculations.length,
     mostUsedCurrency: getMostUsedCurrency(calculations),
     averageBillAmount: getAverageBillAmount(calculations),
-    lastCalculationDate: calculations.length > 0 ? calculations[0].created_at : null
+    lastCalculationDate: calculations.length > 0 ? calculations[calculations.length - 1].created_at : null
   }
 }
 

@@ -13,7 +13,13 @@ export default function HistoryPage() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <h1 className="text-3xl font-bold text-foreground">
-            {t('app.title')}
+            <a 
+              href="/dashboard" 
+              className="hover:opacity-80 transition-opacity"
+              aria-label={t('navigation.dashboard')}
+            >
+              {t('app.title')}
+            </a>
           </h1>
           <div className="flex items-center gap-4">
             <LanguageSelector />
