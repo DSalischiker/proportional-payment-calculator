@@ -4,10 +4,16 @@ export const translations = {
   en: {
     // App
     'app.title': 'Proportional Payment Calculator',
+    'app.name': 'PaySplit',
     
     // Navigation
+    'nav.dashboard': 'Dashboard',
     'nav.calculator': 'Calculator',
     'nav.history': 'History',
+    'nav.personas': 'Personas',
+    'nav.analytics': 'Analytics',
+    'nav.settings': 'Settings',
+    'nav.comingSoon': 'Soon',
     
     // Authentication
     'auth.welcome': 'Welcome',
@@ -173,6 +179,21 @@ export const translations = {
     'dashboard.emptyState.description': 'Start by creating your first calculation',
     'dashboard.emptyState.cta': 'Create Calculation',
     
+    // Actions
+    'actions.newCalculation': 'New Calculation',
+    'actions.viewHistory': 'View History',
+    'actions.managePersonas': 'Manage Personas',
+    
+    // User
+    'user.guest': 'Guest',
+    'user.account': 'My Account',
+    'user.settings': 'Settings',
+    
+    // Theme
+    'theme.light': 'Light',
+    'theme.dark': 'Dark',
+    'theme.system': 'System',
+    
     // Onboarding
     'onboarding.step1.title': 'Welcome to Your Dashboard! 👋',
     'onboarding.step1.description': 'This is your command center. From here you can create new calculations, view your history, and track your spending patterns.',
@@ -188,10 +209,16 @@ export const translations = {
   es: {
     // App
     'app.title': 'Calculadora de Pago Proporcional',
+    'app.name': 'PaySplit',
     
     // Navigation
+    'nav.dashboard': 'Panel',
     'nav.calculator': 'Calculadora',
     'nav.history': 'Historial',
+    'nav.personas': 'Personas',
+    'nav.analytics': 'Análisis',
+    'nav.settings': 'Configuración',
+    'nav.comingSoon': 'Pronto',
     
     // Authentication
     'auth.welcome': 'Bienvenido',
@@ -356,6 +383,21 @@ export const translations = {
     'dashboard.emptyState.title': 'Aún no hay cálculos',
     'dashboard.emptyState.description': 'Comienza creando tu primer cálculo',
     'dashboard.emptyState.cta': 'Crear Cálculo',
+    
+    // Actions
+    'actions.newCalculation': 'Nuevo Cálculo',
+    'actions.viewHistory': 'Ver Historial',
+    'actions.managePersonas': 'Gestionar Personas',
+    
+    // User
+    'user.guest': 'Invitado',
+    'user.account': 'Mi Cuenta',
+    'user.settings': 'Configuración',
+    
+    // Theme
+    'theme.light': 'Claro',
+    'theme.dark': 'Oscuro',
+    'theme.system': 'Sistema',
     
     // Onboarding
     'onboarding.step1.title': '¡Bienvenido a tu Panel! 👋',

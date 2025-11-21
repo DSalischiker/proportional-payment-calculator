@@ -17,17 +17,19 @@ import {
 import { useAuth } from '../contexts/AuthContext'
 import { useLocale } from '../contexts/LocaleContext'
 import { useCalculationHistory } from '../hooks/useCalculationHistory'
-import UserMenu from '../components/UserMenu'
-import LanguageSelector from '../components/LanguageSelector'
 import OnboardingTooltip from '../components/OnboardingTooltip'
 import { formatDistanceToNow } from 'date-fns'
+import { enUS, es } from 'date-fns/locale'
 
 export default function DashboardPage() {
   const { user } = useAuth()
-  const { t } = useLocale()
+  const { t, locale } = useLocale()
   const navigate = useNavigate()
   const { calculations, loading, stats } = useCalculationHistory()
   const [showOnboarding, setShowOnboarding] = useState(false)
+
+  // Get the date-fns locale based on the current locale
+  const dateLocale = locale === 'es' ? es : enUS
 
   // Get recent calculations (last 3)
   const recentCalculations = calculations.slice(0, 3)
@@ -72,23 +74,16 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-background">
-      <div className="w-full max-w-6xl mx-auto px-4 py-8 space-y-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              {t('dashboard.welcome', { name: user.user_metadata?.name?.split(' ')[0] || 'User' })}
-            </h1>
-            <p className="text-muted-foreground">
-              {t('dashboard.subtitle')}
-            </p>
-          </div>
-          <div className="flex items-center gap-4">
-            <LanguageSelector />
-            <UserMenu />
-          </div>
-        </div>
+    <div className="space-y-8">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-foreground">
+          {t('dashboard.welcome', { name: user.user_metadata?.name?.split(' ')[0] || 'User' })}
+        </h1>
+        <p className="text-muted-foreground mt-2">
+          {t('dashboard.subtitle')}
+        </p>
+      </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
@@ -119,6 +114,7 @@ export default function DashboardPage() {
                   : stats?.lastCalculationDate
                   ? formatDistanceToNow(new Date(stats.lastCalculationDate), {
                       addSuffix: true,
+                      locale: dateLocale,
                     })
                   : t('dashboard.noData')}
               </CardTitle>
@@ -142,12 +138,12 @@ export default function DashboardPage() {
                   <div className={`w-12 h-12 rounded-lg ${action.bgColor} flex items-center justify-center mb-2`}>
                     <action.icon className={`h-6 w-6 ${action.color}`} />
                   </div>
-                  <CardTitle>{action.title}</CardTitle>
+                  <CardTitle className="text-left">{action.title}</CardTitle>
                   <CardDescription className="text-left">
                     {action.description}
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="mr-auto">
                   <Button variant="ghost" className="gap-2 px-0">
                     {t('dashboard.getStarted')}
                     <ArrowRight className="h-4 w-4" />
@@ -180,10 +176,10 @@ export default function DashboardPage() {
                       <div className="flex-1 space-y-1">
                         <div className="flex items-center gap-3">
                           <span className="font-medium">{calc.person_a_name}</span>
-                          <span className="text-muted-foreground">vs</span>
+                          <span className="text-muted-foreground">&</span>
                           <span className="font-medium">{calc.person_b_name}</span>
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-left text-sm text-muted-foreground">
                           {t('history.totalBill')}: {calc.total_bill.toFixed(2)} {calc.bill_currency}
                         </p>
                       </div>
@@ -192,6 +188,7 @@ export default function DashboardPage() {
                           <p className="text-sm text-muted-foreground">
                             {formatDistanceToNow(new Date(calc.created_at), {
                               addSuffix: true,
+                              locale: dateLocale,
                             })}
                           </p>
                         </div>
@@ -226,10 +223,9 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         )}
-      </div>
 
-      {/* Onboarding Tooltip */}
-      <OnboardingTooltip show={showOnboarding} onComplete={handleOnboardingComplete} />
-    </div>
-  )
-}
+        {/* Onboarding Tooltip */}
+        <OnboardingTooltip show={showOnboarding} onComplete={handleOnboardingComplete} />
+      </div>
+    )
+  }
